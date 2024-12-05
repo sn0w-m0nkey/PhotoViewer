@@ -1,10 +1,11 @@
-# Drone Photos
 
 ## TODO
-- Add user roles
-  - https://learn.microsoft.com/en-us/aspnet/core/security/authorization/roles?view=aspnetcore-9.0
-- Create DB if not exists
-  - https://stackoverflow.com/questions/54966195/mysql-ef6-and-database-createifnotexists
+- Create DB if not exists - DbContext.Database.EnsureCreated()
+  - https://stackoverflow.com/questions/39083372/how-to-read-connection-string-in-net-core
+  - https://medium.com/@Usurer/ef-core-check-if-db-exists-feafe6e36f4e
+  - https://jasonwatmore.com/dapper-sql-server-create-database-if-it-doesn-t-exist-on-startup-in-aspnet-core
+  - https://www.binaryintellect.net/articles/87446533-54b3-41ad-bea9-994091686a55.aspx
+  - https://stackoverflow.com/questions/38238043/how-and-where-to-call-database-ensurecreated-and-database-migrate
 - Create Azure SQL Database
   - https://learn.microsoft.com/en-us/visualstudio/azure/end-to-end-deployment-entity-framework-core-github-actions?view=vs-2022
   - https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?view=azuresql&tabs=azure-portal
@@ -72,6 +73,9 @@
 - Authentication
 - Use SendGrid to send email confirmation and forgot password emails
   - https://learn.microsoft.com/en-gb/aspnet/core/security/authentication/accconfirm?view=aspnetcore-9.0&tabs=visual-studio#debug
+- Add user roles & role manager
+  - https://blazorhelpwebsite.com/ViewBlogPost/21
+
 
 ## Markdown Cheatsheets
 https://www.markdownguide.org/basic-syntax/#ordered-lists  

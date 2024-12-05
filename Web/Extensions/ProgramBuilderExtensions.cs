@@ -20,10 +20,16 @@ public static class ProgramBuilderExtensions
         services.AddDatabaseDeveloperPageExceptionFilter();
 
         services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddSignInManager()
-            .AddDefaultTokenProviders()
-            .AddRoles<IdentityRole>();
+            .AddDefaultTokenProviders();
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("RequireAdministratorRole",
+                policy => policy.RequireRole("Administrator"));
+        });
         
         return services;
         
@@ -36,7 +42,7 @@ public static class ProgramBuilderExtensions
         services.AddScoped<IdentityUserAccessor>();
         services.AddScoped<IdentityRedirectManager>();
         services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-
+        
         services.AddAuthentication(options =>
             {
                 options.DefaultScheme = IdentityConstants.ApplicationScheme;
