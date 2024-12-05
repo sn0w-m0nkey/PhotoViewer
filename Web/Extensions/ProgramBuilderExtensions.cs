@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Web.Components.Account;
 using Web.Configuration;
 using Web.Data;
+using Web.Services;
 
 namespace Web.Extensions;
 
@@ -21,7 +22,8 @@ public static class ProgramBuilderExtensions
         services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddSignInManager()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddRoles<IdentityRole>();
         
         return services;
         
@@ -87,8 +89,7 @@ public static class ProgramBuilderExtensions
         
         return services;
     }
-
-
+    
     private static void ConfigureOptions(IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<SendGridConfig>(configuration.GetSection(SendGridConfig.SectionName));
@@ -97,7 +98,8 @@ public static class ProgramBuilderExtensions
 
     private static void RegisterServices(IServiceCollection services)
     {
-        services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+        services.AddScoped<IEmailSender<ApplicationUser>, EmailSender>();
+        services.AddScoped<IMailService, SendGridMailService>();
     }
 
     private static void RegisterRazor(IServiceCollection services)

@@ -1,27 +1,25 @@
 # Drone Photos
 
 ## TODO
-- Authentication
-- Use SendGrid to send email confirmation and forgot password emails
-  - https://learn.microsoft.com/en-gb/aspnet/core/security/authentication/accconfirm?view=aspnetcore-9.0&tabs=visual-studio#debug
 - Add user roles
-  - https://www.yogihosting.com/aspnet-core-identity-roles/
   - https://learn.microsoft.com/en-us/aspnet/core/security/authorization/roles?view=aspnetcore-9.0
 - Create DB if not exists
   - https://stackoverflow.com/questions/54966195/mysql-ef6-and-database-createifnotexists
-  - Entity Framework CLI (dotnet ef)
 - Create Azure SQL Database
   - https://learn.microsoft.com/en-us/visualstudio/azure/end-to-end-deployment-entity-framework-core-github-actions?view=vs-2022
   - https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?view=azuresql&tabs=azure-portal
 - Create a workflow
   - https://learn.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel%2Caspnetcore
-- Get Entity Framework Migrations working with workflow[Web.csproj](Web%2FWeb.csproj)
+- Get Entity Framework Migrations working with workflow
   - https://learn.microsoft.com/en-us/azure/azure-sql/database/connect-github-actions-sql-db?view=azuresql&tabs=userlevel
   - https://learn.microsoft.com/en-us/azure/devops/pipelines/targets/azure-sqldb?view=azure-devops&tabs=yaml
   - https://stackoverflow.com/questions/59234655/apply-ef-migrations-in-github-workflow
+  - Entity Framework CLI (dotnet ef)
+    - dotnet ef database update
 - Create Data project
   - Backup project
   - New Branch - Test before merging with main
+  - https://efdocs.readthedocs.io/en/latest/entity-framework/core/managing-schemas/migrations/projects.html
 - Repository Pattern?
   - https://www.codeproject.com/Articles/561584/Repository-Pattern-with-Entity-Framework-using
 - Dependabot
@@ -71,7 +69,9 @@
   - https://learn.microsoft.com/en-us/aspnet/core/razor-pages/razor-pages-conventions?view=aspnetcore-9.0
 
 ## Completed
-
+- Authentication
+- Use SendGrid to send email confirmation and forgot password emails
+  - https://learn.microsoft.com/en-gb/aspnet/core/security/authentication/accconfirm?view=aspnetcore-9.0&tabs=visual-studio#debug
 
 ## Markdown Cheatsheets
 https://www.markdownguide.org/basic-syntax/#ordered-lists  
