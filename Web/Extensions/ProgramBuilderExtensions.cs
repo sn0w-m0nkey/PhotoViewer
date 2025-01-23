@@ -107,12 +107,16 @@ public static class ProgramBuilderExtensions
         
         services.Configure<SendGridConfig>(configuration.GetSection(SendGridConfig.SectionName));
         services.Configure<GmailConfig>(configuration.GetSection(GmailConfig.SectionName));
+        
+        services.Configure<ImageConfig>(configuration.GetSection(ImageConfig.SectionName));
     }
 
     private static void RegisterServices(IServiceCollection services)
     {
         services.AddScoped<IEmailSender<ApplicationUser>, EmailSender>();
         services.AddScoped<IMailService, SendGridMailService>();
+        
+        services.AddScoped<IImageLoader, ImageLoader>();
     }
 
     private static void RegisterRazor(IServiceCollection services)

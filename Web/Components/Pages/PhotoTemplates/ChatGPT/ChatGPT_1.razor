@@ -1,0 +1,157 @@
+﻿@* https://chatgpt.com/c/6798edf7-4e74-8001-8ff5-7c4a27b34992 *@
+
+@page "/ChatGPT_1"
+@namespace Web.Components.Pages.PhotoTemplates.V0
+@inherits BasePhotoTemplate
+
+<h1>Photo Gallery ChatGPT_1</h1>
+
+<div class="photo-gallery">
+    @foreach (var image in Images)
+    {
+        <img class="thumbnail" src="@image.ThumbnailUrl" @onclick="() => OpenModal(image)" loading="lazy" alt="Thumbnail" />
+    }
+
+    @if (SelectedImage != null)
+    {
+        <div class="modal-overlay" @onclick="CloseModal">
+            <div class="modal" @onclick:stopPropagation>
+                <button class="close-button" @onclick="CloseModal">&times;</button>
+                <img class="modal-image" src="@SelectedImage.FullSizeUrl" alt="Full Image" />
+                <button class="arrow-button left" @onclick="ShowPreviousImage">&#9664;</button>
+                <button class="arrow-button right" @onclick="ShowNextImage">&#9654;</button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Photo> Images = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        Images = GetPhotos();
+        return base.OnInitializedAsync();
+    }
+
+    private Photo? SelectedImage;
+
+    private void OpenModal(Photo image)
+    {
+        SelectedImage = image;
+    }
+
+    private void CloseModal()
+    {
+        SelectedImage = null;
+    }
+
+    private void ShowPreviousImage()
+    {
+        if (SelectedImage != null)
+        {
+            var currentIndex = Images.IndexOf(SelectedImage);
+            var previousIndex = (currentIndex - 1 + Images.Count) % Images.Count;
+            SelectedImage = Images[previousIndex];
+        }
+    }
+
+    private void ShowNextImage()
+    {
+        if (SelectedImage != null)
+        {
+            var currentIndex = Images.IndexOf(SelectedImage);
+            var nextIndex = (currentIndex + 1) % Images.Count;
+            SelectedImage = Images[nextIndex];
+        }
+    }
+}
+
+<style>
+    .photo-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 10px;
+    }
+
+    .thumbnail {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .thumbnail:hover {
+        transform: scale(1.05);
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal {
+        position: relative;
+        display: flex;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        max-width: 90%;
+        max-height: 90%;
+        overflow: hidden;
+    }
+
+    .modal-image {
+        max-width: 100%;
+        max-height: 100%;
+        display: block;
+        margin: auto;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #333;
+    }
+
+    .arrow-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        border: none;
+        color: white;
+        font-size: 24px;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 50%;
+    }
+
+    .arrow-button.left {
+        left: 10px;
+    }
+
+    .arrow-button.right {
+        right: 10px;
+    }
+
+    .arrow-button:hover {
+        background: rgba(0, 0, 0, 0.8);
+    }
+</style>

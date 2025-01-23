@@ -1,28 +1,52 @@
+## Blazor
+- https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-9.0
+- https://blazor-university.com/forms/
+
+## Blazor Base Components
+- https://learn.microsoft.com/en-us/dotnet/architecture/blazor-for-web-forms-developers/components
+- https://medium.com/@eric.bjorkvall_79393/blazor-base-components-part-1-loop-a60d56816eaa
+- https://www.ripteq.com.au/blog/blazor-code-behinds-and-base-classes
 
 ## TODO
-- Create DB if not exists - DbContext.Database.EnsureCreated()
-  - https://stackoverflow.com/questions/39083372/how-to-read-connection-string-in-net-core
-  - https://medium.com/@Usurer/ef-core-check-if-db-exists-feafe6e36f4e
-  - https://jasonwatmore.com/dapper-sql-server-create-database-if-it-doesn-t-exist-on-startup-in-aspnet-core
-  - https://www.binaryintellect.net/articles/87446533-54b3-41ad-bea9-994091686a55.aspx
-  - https://stackoverflow.com/questions/38238043/how-and-where-to-call-database-ensurecreated-and-database-migrate
-- Create Azure SQL Database
-  - https://learn.microsoft.com/en-us/visualstudio/azure/end-to-end-deployment-entity-framework-core-github-actions?view=vs-2022
-  - https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?view=azuresql&tabs=azure-portal
-- Create a workflow
-  - https://learn.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel%2Caspnetcore
-- Get Entity Framework Migrations working with workflow
-  - https://learn.microsoft.com/en-us/azure/azure-sql/database/connect-github-actions-sql-db?view=azuresql&tabs=userlevel
-  - https://learn.microsoft.com/en-us/azure/devops/pipelines/targets/azure-sqldb?view=azure-devops&tabs=yaml
-  - https://stackoverflow.com/questions/59234655/apply-ef-migrations-in-github-workflow
-  - Entity Framework CLI (dotnet ef)
-    - dotnet ef database update
-- Create Data project
-  - Backup project
-  - New Branch - Test before merging with main
+
+- Create image viewer templates
+  - https://medium.com/@eric.bjorkvall_79393/blazor-base-components-part-1-loop-a60d56816eaa
+  - https://www.ripteq.com.au/blog/blazor-code-behinds-and-base-classes
+  - V0
+    - https://v0.dev/chat/blazor-photo-gallery-nE7iWU2zkeV - good looking thumbnails
+    - https://v0.dev/chat/blazor-photo-gallery-YfyftwlehvY - nice thumbs, nice modals, lazy loading
+    - https://v0.dev/chat/blazor-photo-gallery-IFRNzs1G7Ez - square thumbs, ugly modal but with nice arrows, X and scrolling, lazy loading
+    - https://v0.dev/chat/blazor-photo-gallery-8krlDrLUUwu - masonry, thumbnails need padding, nice modal with navigation
+
+  - ChatGPT
+    - https://chatgpt.com/c/6798edf7-4e74-8001-8ff5-7c4a27b34992 - perfect thumbs & modal with navigation and good looking arrows
+    - https://chatgpt.com/c/6798eed8-9518-8001-adda-0f7afdebed66 - perfect thumbs, modal just needs a background
+  
+  - ZZZ
+    - 
+
+  - Magic Patterns
+    -
+
+- Combine image viewer with into final template
+- Add MudBlazor
+  - Create MudBlazor Image Gallery
+  - Create MudBlazor NavMenu
+
+- Modify final image template 
+
+- Try implementing Masonry.js
+  - https://masonry.desandro.com/
+
+- Create Data project (backup project or new branch)
   - https://efdocs.readthedocs.io/en/latest/entity-framework/core/managing-schemas/migrations/projects.html
-- Repository Pattern?
+
+- New DbContext (backup project or new branch)
+  - Perform migrations on both DbContexts
+
+- Repository Pattern / Generic Repository
   - https://www.codeproject.com/Articles/561584/Repository-Pattern-with-Entity-Framework-using
+
 - Dependabot
   - https://medium.com/@nickfane/integrating-dependabot-into-your-net-core-project-on-github-3e3024bd3394
 - Play with JsInterop
@@ -38,9 +62,9 @@
   - https://learn.microsoft.com/en-us/azure/storage/blobs/blob-upload-function-trigger?tabs=azure-portal
   - https://stackoverflow.com/questions/31531026/saving-images-in-azure-storage
   - https://blazor.syncfusion.com/documentation/file-upload/getting-started
+
 - Enable images to be moved
-- Implement Masonry.js
-  - https://masonry.desandro.com/
+
 - Display images
 - Unit tests (include in workflow)
   - NUnit
@@ -75,7 +99,11 @@
   - https://learn.microsoft.com/en-gb/aspnet/core/security/authentication/accconfirm?view=aspnetcore-9.0&tabs=visual-studio#debug
 - Add user roles & role manager
   - https://blazorhelpwebsite.com/ViewBlogPost/21
-
+- Create workflow
+- Create Azure database
+  - Create DB if not exists
+  - Add migrations to workflow
+  
 
 ## Markdown Cheatsheets
 https://www.markdownguide.org/basic-syntax/#ordered-lists  

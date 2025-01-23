@@ -1,0 +1,5 @@
+Create a photo gallery UI written in .NET C# razor with a modal viewer to add to a blazor .net core website.
+
+I would like image navigation within the modal.
+Clicking outside the modal should close the modal.
+I would also like lazy loading for the thumbails if they extend beyond the page limits.

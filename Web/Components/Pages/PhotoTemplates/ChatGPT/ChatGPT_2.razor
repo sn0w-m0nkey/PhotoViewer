@@ -1,0 +1,159 @@
+﻿@* https://chatgpt.com/c/6798eed8-9518-8001-adda-0f7afdebed66 *@
+
+@page "/ChatGPT_2"
+@namespace Web.Components.Pages.PhotoTemplates.V0
+@inherits BasePhotoTemplate
+
+<h1>Photo Gallery ChatGPT_2</h1>
+
+<div class="gallery-container">
+    <div class="gallery" id="gallery">
+        @foreach (var image in Images)
+        {
+            <img class="gallery-item" src="@image.ThumbnailUrl" alt="@image.Title" @onclick="() => OpenModal(image)" loading="lazy" />
+        }
+    </div>
+</div>
+
+@if (SelectedImage != null)
+{
+    <div class="modal-overlay" @onclick="CloseModal">
+        <div class="modal-content" @onclick:stopPropagation="true">
+            <button class="close-button" @onclick="CloseModal">&times;</button>
+            <img src="@SelectedImage.FullSizeUrl" alt="@SelectedImage.Title" class="modal-image" />
+            <button class="arrow-button left-arrow" @onclick="() => NavigateImage(-1)">❮</button>
+            <button class="arrow-button right-arrow" @onclick="() => NavigateImage(1)">❯</button>
+        </div>
+    </div>
+}
+
+@code {
+
+    private List<Photo> Images = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        Images = GetPhotos();
+        return base.OnInitializedAsync();
+    }
+
+    private Photo? SelectedImage;
+
+    private void OpenModal(Photo image)
+    {
+        SelectedImage = image;
+    }
+
+    private void CloseModal()
+    {
+        SelectedImage = null;
+    }
+
+    private void NavigateImage(int direction)
+    {
+        if (SelectedImage == null) return;
+
+        var currentIndex = Images.IndexOf(SelectedImage);
+        var newIndex = (currentIndex + direction + Images.Count) % Images.Count;
+        SelectedImage = Images[newIndex];
+    }
+}
+
+<style>
+.gallery-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.gallery {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+.gallery-item {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 12px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.arrow-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 36px;
+    cursor: pointer;
+}
+
+.left-arrow {
+    left: 10px;
+}
+
+.right-arrow {
+    right: 10px;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const gallery = document.getElementById('gallery');
+        if (gallery) {
+            new Masonry(gallery, {
+                itemSelector: '.gallery-item',
+                columnWidth: '.gallery-item',
+                percentPosition: true
+            });
+        }
+    });
+</script>

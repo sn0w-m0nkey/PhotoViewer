@@ -1,0 +1,36 @@
+﻿@* https://v0.dev/chat/blazor-photo-gallery-8krlDrLUUwu *@
+
+@page "/V0_4"
+@namespace Web.Components.Pages.PhotoTemplates.V0
+@inherits BasePhotoTemplate
+
+<h1>Photo Gallery V0_4</h1>
+
+<div class="photo-gallery">
+    <div id="masonry-container" class="masonry-container">
+        @foreach (var photo in GetPhotos())
+        {
+            <div class="masonry-item">
+                <img src="@photo.ThumbnailUrl" 
+                     alt="@photo.Title" 
+                     @onclick="() => OpenModal(photo)"
+                     loading="lazy"
+                     class="thumbnail" />
+            </div>
+        }
+    </div>
+</div>
+
+@if (selectedPhoto != null)
+{
+    <div class="modal @(isModalOpen ? "open" : "")" @onclick="CloseModal">
+        <div class="modal-content" @onclick:stopPropagation>
+            <span class="close" @onclick="CloseModal">&times;</span>
+            <img src="@selectedPhoto.FullSizeUrl" alt="@selectedPhoto.Title" class="modal-image" />
+            <div class="navigation">
+                <button class="nav-button prev" @onclick="PreviousPhoto">&lt;</button>
+                <button class="nav-button next" @onclick="NextPhoto">&gt;</button>
+            </div>
+        </div>
+    </div>
+}
