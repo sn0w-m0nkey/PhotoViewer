@@ -6,6 +6,7 @@ namespace Web.Services;
 
 public interface IImageLoader
 {
+    List<Photo> LoadAllPhotos(params string[] imageFolders);
     List<Photo> LoadAllPhotos(ReadOnlySpan<string> imageFolders);
 }
 
@@ -13,6 +14,11 @@ public class ImageLoader(IOptions<ImageConfig> imageOptions) : IImageLoader
 {
     private readonly ImageConfig _imageConfig = imageOptions.Value;
 
+    public List<Photo> LoadAllPhotos(params string[] imageFolders)
+    {
+        return LoadAllPhotos(imageFolders.AsSpan());
+    }
+    
     public List<Photo> LoadAllPhotos(ReadOnlySpan<string> imageFolders)
     {
         var photos = new List<Photo>();

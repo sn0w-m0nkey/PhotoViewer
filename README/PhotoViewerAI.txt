@@ -1,11 +1,27 @@
-Create a photo gallery UI written in .NET C# razor to add to a blazor .net core website.
+RAZOR
 
-The image thumbnails should all be square with rounded edges.
-Clicking on a thumbnail should open a modal.
-I would like image navigation within the modal using arrows.
+Create a photo gallery UI written in C# razor to add to a blazor .NET core website.
+
+Clicking on a thumbnail should open a modal which displays the image in the correct proportions.
+The modal should have image navigation using arrows.
 Clicking outside the modal should close the modal.
-There should be an X in the top left of the modal to close it.
-I would like lazy loading for the thumbails if they extend beyond the page limits.
+There should be an X in the top right of the modal to close it.
 
-I would like the thumbnails rendered with masonry.js.
+The image thumbnails should all be square with rounded corners.
+Lazy loading should be used for the thumbnails.
+
+
+
+MASONRY
+
+Create a photo gallery UI written in C# razor to add to a blazor .NET core website.
+
+I want the photo gallery to be rendered with masonry.js.
+
+Clicking on a thumbnail should open a modal which displays the image in the correct proportions.
+The modal should have image navigation using arrows.
+Clicking outside the modal should close the modal.
+There should be an X in the top right of the modal to close it.
+
+
 

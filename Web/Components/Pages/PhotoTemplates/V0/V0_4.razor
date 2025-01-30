@@ -6,16 +6,14 @@
 
 <h1>Photo Gallery V0_4</h1>
 
+@inject IJSRuntime JSRuntime
+
 <div class="photo-gallery">
-    <div id="masonry-container" class="masonry-container">
-        @foreach (var photo in GetPhotos())
+    <div id="masonry-container" class="masonry-grid">
+        @foreach (var photo in Photos)
         {
             <div class="masonry-item">
-                <img src="@photo.ThumbnailUrl" 
-                     alt="@photo.Title" 
-                     @onclick="() => OpenModal(photo)"
-                     loading="lazy"
-                     class="thumbnail" />
+                <img src="@photo.ThumbnailUrl" alt="@photo.Title" @onclick="() => OpenModal(photo)" loading="lazy" />
             </div>
         }
     </div>
@@ -23,14 +21,96 @@
 
 @if (selectedPhoto != null)
 {
-    <div class="modal @(isModalOpen ? "open" : "")" @onclick="CloseModal">
+    <div class="modal-overlay" @onclick="CloseModal">
         <div class="modal-content" @onclick:stopPropagation>
-            <span class="close" @onclick="CloseModal">&times;</span>
-            <img src="@selectedPhoto.FullSizeUrl" alt="@selectedPhoto.Title" class="modal-image" />
-            <div class="navigation">
-                <button class="nav-button prev" @onclick="PreviousPhoto">&lt;</button>
-                <button class="nav-button next" @onclick="NextPhoto">&gt;</button>
+            <button class="close-button" @onclick="CloseModal">&times;</button>
+            <img src="@selectedPhoto.FullSizeUrl" alt="@selectedPhoto.Title" />
+            <div class="navigation-arrows">
+                <button class="nav-arrow left" @onclick="PreviousPhoto">&lt;</button>
+                <button class="nav-arrow right" @onclick="NextPhoto">&gt;</button>
             </div>
         </div>
     </div>
 }
+
+@code {
+    private List<Photo> Photos = new List<Photo>();
+    private Photo selectedPhoto;
+    private int currentIndex = -1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Photos = GetPhotos();
+        base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initMasonry");
+        }
+    }
+
+    private void OpenModal(Photo photo)
+    {
+        selectedPhoto = photo;
+        currentIndex = Photos.IndexOf(photo);
+        StateHasChanged();
+    }
+
+    private void CloseModal()
+    {
+        selectedPhoto = null;
+        currentIndex = -1;
+        StateHasChanged();
+    }
+
+    private void PreviousPhoto()
+    {
+        if (currentIndex > 0)
+        {
+            currentIndex--;
+            selectedPhoto = Photos[currentIndex];
+            StateHasChanged();
+        }
+    }
+
+    private void NextPhoto()
+    {
+        if (currentIndex < Photos.Count - 1)
+        {
+            currentIndex++;
+            selectedPhoto = Photos[currentIndex];
+            StateHasChanged();
+        }
+    }
+
+    private async Task<List<Photo>> FetchPhotosAsync()
+    {
+        // Implement your logic to fetch photos from an API or database
+        // For this example, we'll return a dummy list
+        return new List<Photo>
+        {
+            new Photo { Id = 1, Title = "Photo 1", ThumbnailUrl = "/images/thumb1.jpg", FullSizeUrl = "/images/full1.jpg" },
+            new Photo { Id = 2, Title = "Photo 2", ThumbnailUrl = "/images/thumb2.jpg", FullSizeUrl = "/images/full2.jpg" },
+            // Add more photos...
+        };
+    }
+}
+
+<script>
+    window.initMasonry = function () {
+        var grid = document.querySelector('.masonry-grid');
+        var masonry = new Masonry(grid, {
+            itemSelector: '.masonry-item',
+            columnWidth: '.masonry-item',
+            percentPosition: true
+        });
+
+        // Initialize lazy loading
+        var lazyLoadInstance = new LazyLoad({
+            elements_selector: ".masonry-item img"
+        });
+    };
+</script>

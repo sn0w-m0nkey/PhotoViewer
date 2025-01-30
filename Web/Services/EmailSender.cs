@@ -6,7 +6,7 @@ namespace Web.Services;
 
 public class EmailSender(IMailService mailService) : IEmailSender<ApplicationUser>
 {
-    public IMailService MailService { get; } = mailService;
+    private IMailService MailService { get; } = mailService;
     
     public async Task SendConfirmationLinkAsync(ApplicationUser user, string email, string confirmationLink)
     {

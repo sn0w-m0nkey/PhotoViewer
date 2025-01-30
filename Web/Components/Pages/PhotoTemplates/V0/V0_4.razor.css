@@ -1,44 +1,33 @@
 ﻿.photo-gallery {
-    width: 100%;
     padding: 20px;
 }
 
-.masonry-container {
+.masonry-grid {
     width: 100%;
 }
 
 .masonry-item {
-    width: calc(25% - 10px);
+    width: calc(33.333% - 10px);
     margin-bottom: 10px;
 }
 
-.thumbnail {
+.masonry-item img {
     width: 100%;
     height: auto;
-    border-radius: 10px;
     cursor: pointer;
-    transition: transform 0.3s ease;
 }
 
-.thumbnail:hover {
-    transform: scale(1.05);
-}
-
-.modal {
-    display: none;
+.modal-overlay {
     position: fixed;
-    z-index: 1000;
-    left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.9);
-}
-
-.modal.open {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
 
 .modal-content {
@@ -47,40 +36,37 @@
     max-height: 90%;
 }
 
-.modal-image {
-    width: 100%;
-    height: auto;
-    max-height: 90vh;
+.modal-content img {
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
 }
 
-.close {
+.close-button {
     position: absolute;
     top: 10px;
-    left: 10px;
-    color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
+    right: 10px;
+    font-size: 24px;
+    color: white;
+    background: none;
+    border: none;
     cursor: pointer;
 }
 
-.navigation {
+.navigation-arrows {
     position: absolute;
     top: 50%;
-    width: 100%;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: space-between;
 }
 
-.nav-button {
-    background-color: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    padding: 10px 15px;
+.nav-arrow {
     font-size: 24px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    padding: 10px;
     cursor: pointer;
-}
-
-.nav-button:hover {
-    background-color: rgba(0,0,0,0.8);
 }

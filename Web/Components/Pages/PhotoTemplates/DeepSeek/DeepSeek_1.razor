@@ -1,0 +1,120 @@
+﻿@* https://chat.deepseek.com/a/chat/s/b089318a-3b50-4f74-bacb-2e69f951ef5c *@
+
+@page "/DeepSeek_1"
+@namespace Web.Components.Pages.PhotoTemplates.DeepSeek
+@inherits BasePhotoTemplate
+
+@inject IJSRuntime JSRuntime
+
+<h1>Photo Gallery DeepSeek_1</h1>
+
+
+<div class="gallery">
+    @foreach (var image in Images)
+    {
+        <div class="thumbnail" @onclick="() => OpenModal(image)">
+            <img src="@image.ThumbnailUrl" alt="@image.Title" class="lazyload" loading="lazy" />
+        </div>
+    }
+</div>
+
+@if (IsModalOpen)
+{
+    <div class="modal-overlay" @onclick="CloseModal">
+        <div class="modal-content" @onclick:stopPropagation>
+            <span class="close-modal" @onclick="CloseModal">&times;</span>
+            <img src="@SelectedImage?.FullSizeUrl" alt="@SelectedImage?.Title" class="modal-image" />
+            <button class="nav-arrow left-arrow" @onclick="ShowPreviousImage">&#10094;</button>
+            <button class="nav-arrow right-arrow" @onclick="ShowNextImage">&#10095;</button>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Photo> Images = new();
+    private Photo? SelectedImage;
+    private bool IsModalOpen = false;
+    
+    private DotNetObjectReference<DeepSeek_1> dotNetHelper;
+    
+    protected override Task OnInitializedAsync()
+    {
+        Images = GetPhotos();
+        return base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            dotNetHelper = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("addKeyListeners", dotNetHelper);
+        }
+    }
+    
+    private void OpenModal(Photo image)
+    {
+        SelectedImage = image;
+        IsModalOpen = true;
+    }
+
+    [JSInvokable]
+    public async Task CloseModal()
+    {
+        IsModalOpen = false;
+        SelectedImage = null;
+        await JSRuntime.InvokeVoidAsync("removeKeyListeners");
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public async Task ShowNextImage()
+    {
+        var currentIndex = Images.IndexOf(SelectedImage);
+        var nextIndex = (currentIndex + 1) % Images.Count;
+        SelectedImage = Images[nextIndex];
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public async Task ShowPreviousImage()
+    {
+        var currentIndex = Images.IndexOf(SelectedImage);
+        var previousIndex = (currentIndex - 1 + Images.Count) % Images.Count;
+        SelectedImage = Images[previousIndex];
+        StateHasChanged();
+    }
+    
+    public void Dispose()
+    {
+        dotNetHelper?.Dispose();
+    }
+}
+
+<style>
+    .nav-arrow:active {
+        transform: translateY(-50%) scale(0.9); /* Add a slight scale effect on click */
+        transition: transform 0.1s ease;
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+
+<script>
+    function addKeyListeners(dotnetHelper) {
+        
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowLeft') {
+                dotnetHelper.invokeMethodAsync('ShowPreviousImage');
+            } else if (event.key === 'ArrowRight') {
+                dotnetHelper.invokeMethodAsync('ShowNextImage');
+            } else if (event.key === 'Escape') {
+                dotnetHelper.invokeMethodAsync('CloseModal');
+            }
+        });
+    }
+
+    function removeKeyListeners() {
+        document.removeEventListener('keydown', this);
+    }
+</script>

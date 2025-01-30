@@ -14,29 +14,21 @@
   - https://www.ripteq.com.au/blog/blazor-code-behinds-and-base-classes
   - V0
     - https://v0.dev/chat/blazor-photo-gallery-nE7iWU2zkeV - good looking thumbnails
-    - https://v0.dev/chat/blazor-photo-gallery-YfyftwlehvY - nice thumbs, nice modals, lazy loading
-    - https://v0.dev/chat/blazor-photo-gallery-IFRNzs1G7Ez - square thumbs, ugly modal but with nice arrows, X and scrolling, lazy loading
-    - https://v0.dev/chat/blazor-photo-gallery-8krlDrLUUwu - masonry, thumbnails need padding, nice modal with navigation
+    - https://v0.dev/chat/blazor-photo-gallery-YfyftwlehvY - nice thumbs, average modal, lazy loading
+    - https://v0.dev/chat/blazor-photo-gallery-IFRNzs1G7Ez - square thumbs, ugly modal but with nice arrows and X, lazy loading
+    - https://v0.dev/chat/blazor-photo-gallery-8krlDrLUUwu - masonry, thumbnails need are large, they need padding and rounded corners, average modal with good looking arrows
 
   - ChatGPT
-    - https://chatgpt.com/c/6798edf7-4e74-8001-8ff5-7c4a27b34992 - perfect thumbs & modal with navigation and good looking arrows
-    - https://chatgpt.com/c/6798eed8-9518-8001-adda-0f7afdebed66 - perfect thumbs, modal just needs a background
+    - https://chatgpt.com/c/6798edf7-4e74-8001-8ff5-7c4a27b34992 - perfect thumbs & modal with good arrows
+    - https://chatgpt.com/c/6798eed8-9518-8001-adda-0f7afdebed66 - masonry, thumbs don't span the full page, modal images are stretched and not centered
   
-  - ZZZ
-    - 
-
-  - Magic Patterns
-    -
+  - DeepSeek
+    - https://chat.deepseek.com/a/chat/s/5825c267-40f0-47bd-99f7-8327d4302427 - perfect thumbs & modal with good arrows, keyboard modal navigation
+    - https://chat.deepseek.com/a/chat/s/0536b9ce-d9b5-4571-8eef-55ab319305bf
 
 - Combine image viewer with into final template
-- Add MudBlazor
-  - Create MudBlazor Image Gallery
-  - Create MudBlazor NavMenu
 
-- Modify final image template 
-
-- Try implementing Masonry.js
-  - https://masonry.desandro.com/
+- Create MudBlazor NavMenu
 
 - Create Data project (backup project or new branch)
   - https://efdocs.readthedocs.io/en/latest/entity-framework/core/managing-schemas/migrations/projects.html
