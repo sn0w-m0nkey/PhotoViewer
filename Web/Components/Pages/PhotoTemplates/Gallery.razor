@@ -5,3 +5,116 @@
 @inject IJSRuntime JSRuntime
 
 <h1>@GalleryTitle</h1>
+
+<div class="gallery">
+    @foreach (var image in Images)
+    {
+        <div class="thumbnail" @onclick="() => OpenModal(image)">
+            <img src="@image.ThumbnailUrl" alt="@image.Title" class="lazyload" loading="lazy" />
+        </div>
+    }
+</div>
+
+@if (IsModalOpen)
+{
+    <div class="modal-overlay" @onclick="CloseModal">
+        <div class="modal-content" @onclick:stopPropagation>
+            <span class="close-modal" @onclick="CloseModal">&times;</span>
+            <img src="@SelectedImage?.FullSizeUrl" alt="@SelectedImage?.Title" class="modal-image" />
+            <button class="nav-arrow left-arrow" @onclick="() => Navigate(-1)">&#10094;</button>
+            <button class="nav-arrow right-arrow" @onclick="() => Navigate(1)">&#10095;</button>
+        </div>
+    </div>
+}
+
+@code {
+    private List<Photo> Images = new();
+    private Photo? SelectedImage;
+    private bool IsModalOpen;
+    private int SelectedIndex = -1;
+
+    private DotNetObjectReference<Gallery> dotNetHelper;
+
+    protected override Task OnInitializedAsync()
+    {
+        Images = GetPhotos();
+        return base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            dotNetHelper = DotNetObjectReference.Create(this);
+        }
+    }
+
+    private async void OpenModal(Photo image)
+    {
+        SelectedImage = image;
+        SelectedIndex = Images.IndexOf(image);
+        IsModalOpen = true;
+        await JSRuntime.InvokeVoidAsync("addModalNavigation", dotNetHelper);
+    }
+
+    [JSInvokable]
+    public async Task CloseModal()
+    {
+        IsModalOpen = false;
+        SelectedImage = null;
+        SelectedIndex = -1;
+        await JSRuntime.InvokeVoidAsync("removeModalNavigation");
+        StateHasChanged();
+    }
+    
+    private void Navigate(int direction)
+    {
+        var newIndex = SelectedIndex + direction;
+        if (newIndex >= 0 && newIndex < Images.Count)
+        {
+            SelectedImage = Images[newIndex];
+            SelectedIndex = newIndex;
+            StateHasChanged();
+        }
+    }
+    
+    [JSInvokable]
+    public void HandleKeyDown(string key)
+    {
+        if (key == "ArrowLeft")
+        {
+            Navigate(-1);
+        }
+        else if (key == "ArrowRight")
+        {
+            Navigate(1);
+        }
+    }
+
+    public void Dispose()
+    {
+        dotNetHelper?.Dispose();
+    }
+}
+
+<script>
+    function addModalNavigation(dotnetHelper) {
+
+        document.addEventListener('keydown', function (event) {
+            console.log('event.key', event.key);
+
+            if (event.key === 'ArrowLeft') {
+                dotnetHelper.invokeMethodAsync("HandleKeyDown", event.key);
+            } else if (event.key === 'ArrowRight') {
+                dotnetHelper.invokeMethodAsync("HandleKeyDown", event.key);
+            } else if (event.key === 'Escape') {
+                dotnetHelper.invokeMethodAsync('CloseModal');
+            }
+        });
+    }
+
+    function removeModalNavigation() {
+        document.removeEventListener('keydown', this);
+    }
+
+</script>

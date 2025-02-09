@@ -52,12 +52,12 @@
         if (SelectedImage != null)
         {
             // Add keyboard event listener when modal is open
-            await JSRuntime.InvokeVoidAsync("addKeyboardNavigation", DotNetObjectReference.Create(this));
+            await JSRuntime.InvokeVoidAsync("addModalNavigation", DotNetObjectReference.Create(this));
         }
         else
         {
             // Remove keyboard event listener when modal is closed
-            await JSRuntime.InvokeVoidAsync("removeKeyboardNavigation");
+            await JSRuntime.InvokeVoidAsync("removeModalNavigation");
         }
     }
     
@@ -110,12 +110,10 @@
             fitWidth: true // Ensures the grid fits within its container
         });
 
-        // Re-layout Masonry when images are loaded
         imagesLoaded(grid).on('progress', function () {
             msnry.layout();
         });
 
-        // Debounce resize event
         var resizeTimeout;
         window.addEventListener('resize', function () {
             clearTimeout(resizeTimeout);
@@ -125,16 +123,14 @@
         });
     }
 
-    let localKeyDownHandler;
+    let modalNavigationHandler;
 
-    function addKeyboardNavigation(dotNetHelper) {
-        // Remove any existing event listener to avoid duplicates
-        if (localKeyDownHandler) {
-            document.removeEventListener("keydown", localKeyDownHandler);
+    function addModalNavigation(dotNetHelper) {
+        if (modalNavigationHandler) {
+            document.removeEventListener("keydown", modalNavigationHandler);
         }
 
-        // Define the event handler function
-        localKeyDownHandler = function (event) {
+        modalNavigationHandler = function (event) {
             if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
                 dotNetHelper.invokeMethodAsync("HandleKeyDown", event.key);
             } else if (event.key === "Escape") {
@@ -142,14 +138,13 @@
             }
         };
 
-        // Add the event listener
-        document.addEventListener("keydown", localKeyDownHandler);
+        document.addEventListener("keydown", modalNavigationHandler);
     }
 
-    function removeKeyboardNavigation() {
-        if (localKeyDownHandler) {
-            document.removeEventListener("keydown", localKeyDownHandler);
-            localKeyDownHandler = null;
+    function removeModalNavigation() {
+        if (modalNavigationHandler) {
+            document.removeEventListener("keydown", modalNavigationHandler);
+            modalNavigationHandler = null;
         }
     }
 </script>
