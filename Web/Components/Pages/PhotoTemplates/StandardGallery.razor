@@ -33,20 +33,17 @@
     private bool IsModalOpen;
     private int SelectedIndex = -1;
 
-    private DotNetObjectReference<Gallery> dotNetHelper;
+    private DotNetObjectReference<StandardGallery> dotNetHelper;
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        Images = GetPhotos();
-        return base.OnInitializedAsync();
+        Images = base.GetPhotos();
+        await base.OnInitializedAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
-        {
-            dotNetHelper = DotNetObjectReference.Create(this);
-        }
+        
     }
 
     private async void OpenModal(Photo image)
@@ -54,7 +51,7 @@
         SelectedImage = image;
         SelectedIndex = Images.IndexOf(image);
         IsModalOpen = true;
-        await JSRuntime.InvokeVoidAsync("addModalNavigation", dotNetHelper);
+        await JSRuntime.InvokeVoidAsync("addModalNavigation", DotNetObjectReference.Create(this));
     }
 
     [JSInvokable]
