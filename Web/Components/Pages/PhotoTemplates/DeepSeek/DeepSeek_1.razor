@@ -6,6 +6,11 @@
 
 @inject IJSRuntime JSRuntime
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+
+<script src="lib/js/ModalNavigation.js"></script>
+
+
 <h1>Photo Gallery DeepSeek_1</h1>
 
 <div class="gallery">
@@ -98,15 +103,6 @@
     }
 }
 
-<style>
-    .nav-arrow:active {
-        transform: translateY(-50%) scale(0.9); /* Add a slight scale effect on click */
-        transition: transform 0.1s ease;
-    }
-</style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
-
 <script>
     // Use an IIFE to encapsulate the code and avoid global scope pollution
     (function () {
@@ -140,7 +136,6 @@
             }
         }
 
-        // Expose the functions to the global scope
         window.addModalNavigation = addModalNavigation;
         window.removeModalNavigation = removeModalNavigation;
     })();

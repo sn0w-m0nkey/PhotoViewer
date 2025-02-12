@@ -100,6 +100,11 @@
     background-color: rgba(0, 0, 0, 0.8); /* Darken on hover */
 }
 
+.nav-arrow:active {
+    transform: translateY(-50%) scale(0.9); /* Add a slight scale effect on click */
+    transition: transform 0.1s ease;
+}
+
 .left-arrow {
     left: 15px; /* Adjust position for better spacing */
 }
