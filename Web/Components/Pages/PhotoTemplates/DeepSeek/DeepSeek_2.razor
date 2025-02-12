@@ -41,7 +41,7 @@
         Images = GetPhotos();
         return base.OnInitializedAsync();
     }
-    
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -60,7 +60,7 @@
             await JSRuntime.InvokeVoidAsync("removeModalNavigation");
         }
     }
-    
+
     private void OpenModal(Photo image)
     {
         SelectedImage = image;
@@ -85,9 +85,9 @@
             StateHasChanged();
         }
     }
-    
+
     [JSInvokable]
-    public void HandleKeyDown(string key)
+    public void HandleNavigationKeyDown(string key)
     {
         if (key == "ArrowLeft")
         {
@@ -123,28 +123,40 @@
         });
     }
 
-    let modalNavigationHandler;
+    // Use an IIFE to encapsulate the code and avoid global scope pollution
+    (function () {
+        // Store the event handler function reference
+        let keyDownHandler;
 
-    function addModalNavigation(dotNetHelper) {
-        if (modalNavigationHandler) {
-            document.removeEventListener("keydown", modalNavigationHandler);
-        }
-
-        modalNavigationHandler = function (event) {
-            if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
-                dotNetHelper.invokeMethodAsync("HandleKeyDown", event.key);
-            } else if (event.key === "Escape") {
-                dotNetHelper.invokeMethodAsync("CloseModal");
+        function addModalNavigation(dotNetHelper) {
+            // Remove any existing event listener to avoid duplicates
+            if (keyDownHandler) {
+                document.removeEventListener("keydown", keyDownHandler);
             }
-        };
 
-        document.addEventListener("keydown", modalNavigationHandler);
-    }
+            // Define the event handler function
+            keyDownHandler = function (event) {
+                if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+                    dotNetHelper.invokeMethodAsync("HandleNavigationKeyDown", event.key);
+                } else if (event.key === "Escape") {
+                    dotNetHelper.invokeMethodAsync("CloseModal");
+                }
+            };
 
-    function removeModalNavigation() {
-        if (modalNavigationHandler) {
-            document.removeEventListener("keydown", modalNavigationHandler);
-            modalNavigationHandler = null;
+            // Add the event listener
+            document.addEventListener("keydown", keyDownHandler);
         }
-    }
+
+        function removeModalNavigation() {
+            // Remove the event listener if it exists
+            if (keyDownHandler) {
+                document.removeEventListener("keydown", keyDownHandler);
+                keyDownHandler = null; // Clear the reference
+            }
+        }
+
+        // Expose the functions to the global scope
+        window.addModalNavigation = addModalNavigation;
+        window.removeModalNavigation = removeModalNavigation;
+    })();
 </script>

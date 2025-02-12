@@ -8,7 +8,6 @@
 
 <h1>Photo Gallery DeepSeek_1</h1>
 
-
 <div class="gallery">
     @foreach (var image in Images)
     {
@@ -24,8 +23,8 @@
         <div class="modal-content" @onclick:stopPropagation>
             <span class="close-modal" @onclick="CloseModal">&times;</span>
             <img src="@SelectedImage?.FullSizeUrl" alt="@SelectedImage?.Title" class="modal-image" />
-            <button class="nav-arrow left-arrow" @onclick="ShowPreviousImage">&#10094;</button>
-            <button class="nav-arrow right-arrow" @onclick="ShowNextImage">&#10095;</button>
+            <button class="nav-arrow left-arrow" @onclick="() => Navigate(-1)">&#10094;</button>
+            <button class="nav-arrow right-arrow" @onclick="() => Navigate(1)">&#10095;</button>
         </div>
     </div>
 }
@@ -34,9 +33,10 @@
     private List<Photo> Images = new();
     private Photo? SelectedImage;
     private bool IsModalOpen = false;
-    
+    private int SelectedIndex = -1;
+
     private DotNetObjectReference<DeepSeek_1> dotNetHelper;
-    
+
     protected override Task OnInitializedAsync()
     {
         Images = GetPhotos();
@@ -47,14 +47,14 @@
     {
         if (firstRender)
         {
-            dotNetHelper = DotNetObjectReference.Create(this);
-            await JSRuntime.InvokeVoidAsync("addKeyListeners", dotNetHelper);
+            await JSRuntime.InvokeVoidAsync("addModalNavigation", DotNetObjectReference.Create(this));
         }
     }
-    
+
     private void OpenModal(Photo image)
     {
         SelectedImage = image;
+        SelectedIndex = Images.IndexOf(image);
         IsModalOpen = true;
     }
 
@@ -63,28 +63,35 @@
     {
         IsModalOpen = false;
         SelectedImage = null;
-        await JSRuntime.InvokeVoidAsync("removeKeyListeners");
+        SelectedIndex = -1;
+        await JSRuntime.InvokeVoidAsync("removeModalNavigation");
         StateHasChanged();
     }
 
-    [JSInvokable]
-    public async Task ShowNextImage()
+    private void Navigate(int direction)
     {
-        var currentIndex = Images.IndexOf(SelectedImage);
-        var nextIndex = (currentIndex + 1) % Images.Count;
-        SelectedImage = Images[nextIndex];
-        StateHasChanged();
+        var newIndex = SelectedIndex + direction;
+        if (newIndex >= 0 && newIndex < Images.Count)
+        {
+            SelectedImage = Images[newIndex];
+            SelectedIndex = newIndex;
+            StateHasChanged();
+        }
     }
 
     [JSInvokable]
-    public async Task ShowPreviousImage()
+    public void HandleNavigationKeyDown(string key)
     {
-        var currentIndex = Images.IndexOf(SelectedImage);
-        var previousIndex = (currentIndex - 1 + Images.Count) % Images.Count;
-        SelectedImage = Images[previousIndex];
-        StateHasChanged();
+        if (key == "ArrowLeft")
+        {
+            Navigate(-1);
+        }
+        else if (key == "ArrowRight")
+        {
+            Navigate(1);
+        }
     }
-    
+
     public void Dispose()
     {
         dotNetHelper?.Dispose();
@@ -101,20 +108,40 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
 
 <script>
-    function addKeyListeners(dotnetHelper) {
-        
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'ArrowLeft') {
-                dotnetHelper.invokeMethodAsync('ShowPreviousImage');
-            } else if (event.key === 'ArrowRight') {
-                dotnetHelper.invokeMethodAsync('ShowNextImage');
-            } else if (event.key === 'Escape') {
-                dotnetHelper.invokeMethodAsync('CloseModal');
-            }
-        });
-    }
+    // Use an IIFE to encapsulate the code and avoid global scope pollution
+    (function () {
+        // Store the event handler function reference
+        let keyDownHandler;
 
-    function removeKeyListeners() {
-        document.removeEventListener('keydown', this);
-    }
+        function addModalNavigation(dotNetHelper) {
+            // Remove any existing event listener to avoid duplicates
+            if (keyDownHandler) {
+                document.removeEventListener("keydown", keyDownHandler);
+            }
+
+            // Define the event handler function
+            keyDownHandler = function (event) {
+                if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+                    dotNetHelper.invokeMethodAsync("HandleNavigationKeyDown", event.key);
+                } else if (event.key === "Escape") {
+                    dotNetHelper.invokeMethodAsync("CloseModal");
+                }
+            };
+
+            // Add the event listener
+            document.addEventListener("keydown", keyDownHandler);
+        }
+
+        function removeModalNavigation() {
+            // Remove the event listener if it exists
+            if (keyDownHandler) {
+                document.removeEventListener("keydown", keyDownHandler);
+                keyDownHandler = null; // Clear the reference
+            }
+        }
+
+        // Expose the functions to the global scope
+        window.addModalNavigation = addModalNavigation;
+        window.removeModalNavigation = removeModalNavigation;
+    })();
 </script>
