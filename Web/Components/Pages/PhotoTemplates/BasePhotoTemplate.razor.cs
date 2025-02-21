@@ -24,7 +24,7 @@ public class BasePhotoTemplate : ComponentBase
     protected List<Photo> GetPhotos()
     {
         var imagePaths = new List<string>();
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 5; i++)
         {
             imagePaths.Add(_imageOptions.Value.CanonSampleImages);
             imagePaths.Add(_imageOptions.Value.FujiSampleImages);
